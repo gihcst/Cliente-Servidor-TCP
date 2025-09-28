@@ -50,8 +50,10 @@ def handle_client(client_socket):
 
 # Configuração do servidor
 def server():
+
+    server_port = int(input("Digite a porta que o server vai escutar: "))  # suportar a escolha de porta
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind(('0.0.0.0', 12345))
+    server_socket.bind(('0.0.0.0', server_port))
     server_socket.listen(5)
     print("[+] Servidor iniciado, aguardando conexões...")
 

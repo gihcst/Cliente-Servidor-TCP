@@ -3,23 +3,25 @@ import os
 
 def client():
     server_ip = input("Digite o IP do servidor: ")
-    server_port = 12345
+    server_port = int(input("Digite a porta do servidor: "))  # suportar a escolha de porta
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((server_ip, server_port))
 
     while True:
-        command = input("Digite um comando (LIST, PUT <arquivo>, QUIT): ")
-        client_socket.send(command.encode())
+        rawCommand = input("Digite um comando (LIST, PUT <arquivo>, QUIT): ")
+        command = rawCommand.upper()
 
         if command.startswith('LIST'):
+            client_socket.send(b'LIST')
             files = client_socket.recv(1024).decode()
             print(f"Arquivos no servidor:\n{files}")
         
         elif command.startswith('PUT'):
-            filename = command.split(' ')[1]
+            filename = rawCommand.split(' ')[1]
             if os.path.exists(filename):
-                client_socket.send(command.encode())  # Envia o comando PUT para o servidor
+                commandToSend = f'PUT {filename}'
+                client_socket.send(commandToSend.encode())  # Envia o comando PUT para o servidor
                 with open(filename, 'rb') as f:
                     while (file_data := f.read(1024)):
                         client_socket.send(file_data)  # Envia os dados em blocos de 1024 bytes
@@ -38,6 +40,7 @@ def client():
                 client_socket.send('ERRO: Arquivo não encontrado'.encode())
         
         elif command == 'QUIT':
+            client_socket.send(b'QUIT')
             print("Conexão encerrada.")
             break
 
