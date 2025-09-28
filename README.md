@@ -68,7 +68,7 @@ Agora que estamos no lugar certo, vamos usar o Docker para criar e rodar a aplic
 
   * Neste **Terminal 2**, execute o comando abaixo para iniciar o contêiner do cliente:
     ```bash
-    docker run --rm -it --name cliente --network minha_rede cliente-servidor-tcp
+    docker run --rm -it --name cliente --network minha_rede -v "seucaminho\cliente-servidor-tcp\logs:/app/logs" cliente-servidor-tcp
     ```
   * **Resultado:** O seu prompt de comando vai mudar para algo como `root@xxxxxxxxxxxx:/app#`. Isso significa que você não está mais no seu computador, mas sim **dentro do shell do contêiner do cliente**. É neste ambiente que vamos executar os próximos comandos.
 
